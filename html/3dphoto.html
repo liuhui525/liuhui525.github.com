@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		*{margin:0;padding:0;list-style:none;}
+		body{background:#000;}
+		.box{
+			width:133px;
+			height:200px;
+			margin:100px auto;
+			transform-style:preserve-3d;
+			transform: perspective(800px) rotateX(-15deg);
+			
+			position:relative;
+		}
+		.box li{
+			width:100%;
+			height:100%;
+			position:absolute;
+			left:0;top:0;
+			box-shadow:0 0 3px #fff,0 0 5px yellow,0 0 7px orange,0 0 10px orange;
+			-webkit-box-reflect:below 10px linear-gradient(rgba(0,0,0,0) 70% ,rgba(0,0,0,0.8));
+		}
+		
+	</style>
+	<script>
+		window.onload=function(){
+			var oBox=document.querySelector('.box');
+			var N=11;
+			var d=360/N;
+			for(var i=0;i<N;i++){
+				var oLi=document.createElement('li');
+				oLi.style.backgroundImage='url(img2/'+(i+1)+'.jpg';
+				oBox.appendChild(oLi);
+				//定时器 有延迟执行的特性，和所加时间无关
+				(function(oLi,index){
+					setTimeout(function(){
+						oLi.style.transition='1s all ease '+(N-index)*200+'ms';
+						oLi.style.transform='rotateY('+(d*index)+'deg) translateZ(400px)';
+					},30)
+				})(oLi,i)
+				var aLi=oBox.children;
+				var n=0;
+				var y=-10;
+				var x=0;
+				document.onkeydown=function(ev){
+					switch(ev.keyCode){
+						case 37:
+							n--;
+							break;
+						case 39:
+							n++;
+							break;
+						case 38:
+							y+=10;
+							break;
+						case 40:
+							y-=10;
+							break;
+					}
+					change(n);
+				}
+				document.onmousedowm=function(ev){
+					var disX=ev.clientX;
+					var disY=ev.clientY;
+					document.onmousemove=function(ev){
+						x=ev.clientX-disX;
+						change(x/8);
+					};
+					document.onmouseup=function(){
+						document.onmousemove=null;
+						document.onmouseup=null;
+					};
+					return false;
+				}
+				function change(n){
+					oBox.style.transform='perspective(800px) rotateX('+y+'deg)';
+					for(var i=0;i<aLi.length;i++){
+						aLi[i].style.transition='1s all ease';
+						aLi[i].style.transform='rotateY('+(i+n)*d+'deg) translateZ(400px)';
+						var s_opa=Math.abs(Math.abs((i+n)*d)%360-180)/180;
+						if(s_opa<0.4){s_opa=0.4;}
+						aLi[i].style.opacity=s_opa;
+
+					}
+				}
+			}
+		}
+	</script>
+</head>
+<body>
+	<ul class="box">
+		
+	</ul>
+</body>
+</html>
