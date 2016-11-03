@@ -30,7 +30,7 @@ window.onload=function (){
                     clearInterval(timer);
                 }   
                 
-            },300)
+            },200)
       
 	
 	//时钟
